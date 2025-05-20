@@ -14,7 +14,10 @@ class CategoryController extends Controller
      */
     public function index()
     {
-        echo "<h1>Hello</h1>";
+        // echo "<h1>Hello</h1>";
+        // $category = Category::all();
+        $category = Category::where('status','Active')->get();
+        return view('category.index',compact('category'));
     }
 
     /**
@@ -85,6 +88,9 @@ class CategoryController extends Controller
      */
     public function destroy($id)
     {
-        //
+        // echo $id;
+        $category = Category::find($id);
+        $category->delete();
+        return redirect()->route("category.index")->with("success","Record Deleted");
     }
 }
