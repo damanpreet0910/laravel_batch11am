@@ -31,3 +31,5 @@ Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name
 // });
 
 Route::resource('category',CategoryController::class);
+
+Route::post("categorySoftDelete",[CategoryController::class,'softdelete'])->name('categorySoftDelete');

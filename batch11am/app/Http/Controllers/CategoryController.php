@@ -16,7 +16,8 @@ class CategoryController extends Controller
     {
         // echo "<h1>Hello</h1>";
         // $category = Category::all();
-        $category = Category::where('status','Active')->get();
+        // $category = Category::where('status','Active')->get();
+        $category = Category::get();
         return view('category.index',compact('category'));
     }
 
@@ -65,7 +66,9 @@ class CategoryController extends Controller
      */
     public function edit($id)
     {
-        //
+        // echo $id;
+        $category = Category::find($id);
+        return view("category.edit",compact("category"));
     }
 
     /**
@@ -77,7 +80,14 @@ class CategoryController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        // print_r($request->all());
+        // echo $id;
+
+        $category = Category::find($id);
+        $category->categoryName = $request->categoryName;
+        $category->description = $request->description;
+        $category->save();
+        return redirect()->route("category.index")->with("success","REcord Updated");
     }
 
     /**
@@ -92,5 +102,19 @@ class CategoryController extends Controller
         $category = Category::find($id);
         $category->delete();
         return redirect()->route("category.index")->with("success","Record Deleted");
+    }
+
+    public function softdelete(Request $request){
+        // print_r($request->all());
+        $category = Category::find($request->id);
+        if($category->status == "Active")
+        {
+            $category->status = "Inactive";
+        }
+        else{
+            $category->status = "Active";
+        }
+        $category->save();
+         return redirect()->route("category.index")->with("success","Status has been changed"); 
     }
 }
